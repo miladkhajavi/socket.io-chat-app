@@ -11,7 +11,7 @@
   </a>
 </p>
 
-> shopping list desktop app with electron
+> chat-app with socket.io
 
 ## Install
 
