@@ -33,7 +33,7 @@ body {
   right: 0px;
   overflow: auto;
 }
-.body-messages {
+#body-messages {
   margin: 0 20px;
 }
 
