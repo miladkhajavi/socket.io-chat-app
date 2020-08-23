@@ -3,17 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./style/index.css">
+    <script src='https://kit.fontawesome.com/a076d05399.js'></script>
     <title>chat-app</title>
 </head>
 <body>
-    <h1>چت روم</h1>
+    <div class="head">
+        <h1>چت روم</h1>
+    </div>
     <!-- <button id="increase">add +</button> -->
 
+    <div class="class-section">
+        <div class="body-messages">
+            body
+        </div>
+    </div>
+
+<div class="item-sends">
     <form id="message-form">
         <input id="form-input" name="messages" placeholder="پیام">
-        <button>ارسال</button>
+        <button><i class='fas fa-arrow-left' style='font-size:30px;color:white'></i></button>
     </form>
-    <button id="send-location">موقعیت مکانی</button>
+    <button id="send-location"><i class='fas fa-map-marker-alt' style='font-size:30px;color:white'></i></button>
+</div>
 
 <script src="/socket.io/socket.io.js"></script>
 <script src="./js/chat-client.js"></script>
