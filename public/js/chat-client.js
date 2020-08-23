@@ -20,7 +20,9 @@ document.querySelector("#message-form").addEventListener("submit", (e) => {
 
   const message = e.target.elements.messages.value;
   // console.log(message);
-  socket.emit("sendMSG", message);
+  socket.emit("sendMSG", message , (msg)=>{
+      console.log('this message was delivered!', msg);
+  });
 });
 // ********************************
 
@@ -34,6 +36,8 @@ document.querySelector("#send-location").addEventListener("click", () => {
     socket.emit("sendLocation", {
       latitude: position.coords.latitude,
       longitude: position.coords.longitude,
+    } , ()=>{
+        console.log('موقعیت مکانی به اشتراک گذاشته شد');
     });
   });
 });

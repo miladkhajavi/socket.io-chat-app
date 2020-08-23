@@ -31,14 +31,16 @@ io.on("connection", (socket) => {
   socket.broadcast.emit("message", "new user joined the chat");
   // *******************************
   // send message ******************
-  socket.on("sendMSG", (message) => {
+  socket.on("sendMSG", (message,callback) => {
     // console.log(message);
     io.emit("message", message);
+    callback('Delivered')
   });
   // *******************************
   // send my current location ******
-  socket.on('sendLocation' , (coords)=>{
+  socket.on('sendLocation' , (coords , callback)=>{
     io.emit('message' , `https://google.com/maps?q=${coords.latitude},${coords.longitude}`)
+    callback()
   })
   // *******************************
 
