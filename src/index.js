@@ -1,8 +1,8 @@
 const path = require("path");
 const express = require("express");
 const http = require("http");
+const {generateMSG, generateLocationMSG} = require('./utils/Msg')
 const socketio = require("socket.io");
-
 const app = express();
 const server = http.createServer(app);
 const io = socketio(server);
@@ -27,8 +27,8 @@ io.on("connection", (socket) => {
   // ********************************
 
   // welcome user ******************
-  socket.emit("message", "welcome");
-  socket.broadcast.emit("message", "new user joined the chat");
+  socket.emit("message", generateMSG('خوش آمدید!'));
+  socket.broadcast.emit("message", generateMSG('new user joined the chat'));
   // *******************************
   // send message ******************
   socket.on("sendMSG", (message, callback) => {
@@ -41,7 +41,7 @@ io.on("connection", (socket) => {
   socket.on("sendLocation", (coords, callback) => {
     io.emit(
       "messageLocation",
-      `https://google.com/maps?q=${coords.latitude},${coords.longitude}`
+      generateLocationMSG(`https://google.com/maps?q=${coords.latitude},${coords.longitude}`)
     );
     callback();
   });
@@ -49,7 +49,7 @@ io.on("connection", (socket) => {
 
   // disconnected ******************
   socket.on("disconnect", () => {
-    io.emit("message", "A user has left the chat");
+    io.emit("message", generateMSG('A user has left the chat'));
   });
   // *******************************
 });

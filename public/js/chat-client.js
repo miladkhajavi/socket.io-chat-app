@@ -1,20 +1,20 @@
 const socket = io();
 
+// element
+const $messageForm = document.querySelector("#message-form");
+const $messageFormInput = $messageForm.querySelector("input");
+const $messageFormButton = $messageForm.querySelector("button");
+const $sendLocationButton = document.querySelector("#send-location");
+const $messageBody = document.querySelector("#body-messages");
+//
 
+// template
 
-// element 
-const $messageForm = document.querySelector("#message-form")
-const $messageFormInput = $messageForm.querySelector("input")
-const $messageFormButton = $messageForm.querySelector("button")
-const $sendLocationButton = document.querySelector("#send-location")
-const $messageBody = document.querySelector('#body-messages')
-// 
-
-// template 
-
-const messageTemplate = document.querySelector('#message-template').innerHTML
-const messageTemplateLocation = document.querySelector('#message-template-location').innerHTML
-// 
+const messageTemplate = document.querySelector("#message-template").innerHTML;
+const messageTemplateLocation = document.querySelector(
+  "#message-template-location"
+).innerHTML;
+//
 
 // events*************************
 // socket.on('countUpdate', (count)=>{
@@ -28,37 +28,38 @@ const messageTemplateLocation = document.querySelector('#message-template-locati
 // ********************************
 socket.on("message", (message) => {
   // console.log(message);
-  const html = Mustache.render(messageTemplate,{
-    messageText:message
-  })
-  $messageBody.insertAdjacentHTML('beforeend',html)
+  const html = Mustache.render(messageTemplate, {
+    messageText: message.txt,
+    timeMSG:moment(message.createdAt).format('h:mm:ss A')
+  });
+  $messageBody.insertAdjacentHTML("beforeend", html);
 });
 
-socket.on("messageLocation" , (url)=>{
-  const html = Mustache.render(messageTemplateLocation,{
-    url
-  })
-  $messageBody.insertAdjacentHTML('beforeend',html)
-})
+socket.on("messageLocation", (url) => {
+  // console.log(url);
+  const html = Mustache.render(messageTemplateLocation, {
+    url:url.loc,
+    timeMSG:moment(url.createdAt).format('h:mm:ss A')
+  });
+  $messageBody.insertAdjacentHTML("beforeend", html);
+});
 
 // send message ******************
 $messageForm.addEventListener("submit", (e) => {
   e.preventDefault();
-  
-  $messageFormButton.setAttribute('disabled','disabled')
-  // disable
 
+  $messageFormButton.setAttribute("disabled", "disabled");
+  // disable
 
   const message = e.target.elements.messages.value;
   // console.log(message);
-  socket.emit("sendMSG", message , (msg)=>{
-  
-    $messageFormButton.removeAttribute('disabled')
-    $messageFormInput.value =''
-    $messageFormInput.focus()
+  socket.emit("sendMSG", message, (msg) => {
+    $messageFormButton.removeAttribute("disabled");
+    $messageFormInput.value = "";
+    $messageFormInput.focus();
     // enable
 
-    console.log('this message was delivered!', msg);
+    console.log("this message was delivered!", msg);
   });
 });
 // ********************************
@@ -69,19 +70,23 @@ $sendLocationButton.addEventListener("click", () => {
     return alert("geolocation is not supported by your browser ");
   }
 
-//   disable
-  $sendLocationButton.setAttribute('disabled','disabled')
+  //   disable
+  $sendLocationButton.setAttribute("disabled", "disabled");
 
   navigator.geolocation.getCurrentPosition((position) => {
     //   console.log(position);
-    socket.emit("sendLocation", {
-      latitude: position.coords.latitude,
-      longitude: position.coords.longitude,
-    } , ()=>{
+    socket.emit(
+      "sendLocation",
+      {
+        latitude: position.coords.latitude,
+        longitude: position.coords.longitude,
+      },
+      () => {
         // enable
-        $sendLocationButton.removeAttribute('disabled')
-        console.log('موقعیت مکانی به اشتراک گذاشته شد');
-    });
+        $sendLocationButton.removeAttribute("disabled");
+        console.log("موقعیت مکانی به اشتراک گذاشته شد");
+      }
+    );
   });
 });
 // ********************************

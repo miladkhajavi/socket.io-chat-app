@@ -36,7 +36,27 @@ body {
 #body-messages {
   margin: 0 20px;
 }
+.message-scope {
+  width: 200px;
+  background-color: #ceffc4;
+  padding: 10px;
+  margin: 10px;
+  border-top-right-radius: 30px;
+  border-top-left-radius: 30px;
+  border-bottom-right-radius: 30px;
+  overflow: hidden;
+  word-wrap: break-word;
+}
 
+
+ 
+.message-scope span{
+  color: #353535;
+  text-shadow: 0 0 10px;
+  font-size: 10px;
+  display: flex;
+  justify-content: flex-end;
+}
 .item-sends {
   position: absolute;
   bottom: 2px;
