@@ -3,7 +3,10 @@ body {
   margin: 0;
   direction: rtl;
 }
-
+.parent{
+  display: flex;
+  justify-content: space-between;
+}
 .head {
   margin-bottom: 5px;
   background-color: #18e923;
@@ -37,7 +40,7 @@ body {
   margin: 0 20px;
 }
 .message-scope {
-  width: 200px;
+  width: 20%;
   background-color: #ceffc4;
   padding: 10px;
   margin: 10px;
