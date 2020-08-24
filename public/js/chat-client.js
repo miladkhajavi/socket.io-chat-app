@@ -27,7 +27,7 @@ const messageTemplateLocation = document.querySelector(
 // })
 // ********************************
 socket.on("message", (message) => {
-  // console.log(message);
+  console.log(message);
   const html = Mustache.render(messageTemplate, {
     messageText: message.txt,
     timeMSG:moment(message.createdAt).format('h:mm:ss A')
