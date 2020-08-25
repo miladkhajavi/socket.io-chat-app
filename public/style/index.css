@@ -96,3 +96,9 @@ button {
   background-color: black;
   box-shadow: 0 0 20px;
 }
+#parent-message-scope{
+  display: flex;
+}
+#own{
+  display: none;
+}
