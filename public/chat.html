@@ -24,7 +24,7 @@
 
     <div class="item-sends">
         <form id="message-form">
-            <input id="form-input" name="messages" placeholder="پیام">
+            <input id="form-input" name="messages" placeholder="پیام" required autocomplete="off">
             <button><i class='fas fa-arrow-left' style='font-size:30px;color:white'></i></button>
         </form>
         <button id="send-location"><i class='fas fa-map-marker-alt' style='font-size:30px;color:white'></i></button>
@@ -33,16 +33,18 @@
   
     <!-- for text message -->
     <script id="message-template" type="text/html">
-        <div class="message-scope">
-            <h6>کاربر</h6>
-            <p>{{messageText}}</p>
-            <span>{{timeMSG}}</span>
-        </div>
+        <!-- <div id="parent-message-scope"> -->
+            <div class="message-scope" id="message-scop"><span id="own">{{own}}</span>
+                <h6 id="username">{{name}}</h6>
+                <p>{{messageText}}</p>
+                <span>{{timeMSG}}</span>
+            </div>
+        <!-- </div> -->
     </script>
     <!-- for link location-->
     <script id="message-template-location" type="text/html">
         <div class="message-scope">
-            <h6>کاربر</h6>
+            <h5>{{name}}</h5>
             <a href="{{url}}">موقیت مکانی من</a>
             <span>{{timeMSG}}</span>
         </div>
@@ -55,6 +57,7 @@
 
     <script src="/socket.io/socket.io.js"></script>
     <script src="./js/chat-client.js"></script>
+
 </body>
 
 </html>
