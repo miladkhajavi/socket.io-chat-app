@@ -6,6 +6,7 @@ const $messageFormInput = $messageForm.querySelector("input");
 const $messageFormButton = $messageForm.querySelector("button");
 const $sendLocationButton = document.querySelector("#send-location");
 const $messageBody = document.querySelector("#body-messages");
+
 //
 
 // template
@@ -15,7 +16,11 @@ const messageTemplateLocation = document.querySelector(
   "#message-template-location"
 ).innerHTML;
 //
-
+// option
+const { username, room } = Qs.parse(location.search, {
+  ignoreQueryPrefix: true,
+});
+//
 // events*************************
 // socket.on('countUpdate', (count)=>{
 //     console.log('client on count update' ,count);
@@ -27,19 +32,47 @@ const messageTemplateLocation = document.querySelector(
 // })
 // ********************************
 socket.on("message", (message) => {
-  console.log(message);
+  // const search =location.search.substring(1); 
+  // const currentUser = JSON.parse('{"' + search.replace(/&/g, '","').replace(/=/g,'":"') + '"}', function(key, value) { return key===""?value:decodeURIComponent(value) })
+  // console.log(currentUser,username);
+  
+  // if(currentUser.username === message.username){
+  //   message.own = 'yes'
+  // }else{  
+  //   message.own = 'no'
+  // }
   const html = Mustache.render(messageTemplate, {
+    // own:message.own,
+    name: message.username,
     messageText: message.txt,
-    timeMSG:moment(message.createdAt).format('h:mm:ss A')
+    timeMSG: moment(message.createdAt).format("h:mm:ss A"),
   });
+ 
   $messageBody.insertAdjacentHTML("beforeend", html);
+  
+
+  // let div = document.querySelectorAll('#own')
+  // for (let i = 0; i < div.length; i++) {
+  //   if(div[i].innerText === 'yes'){
+  //     // // console.log('yesssss');
+  //     // document.getElementById("message-scop").style.display="flex"
+  //     // document.getElementById("message-scop").style.justifySelf="start"
+  //   }else{
+  //     // document.getElementById("message-scop").style.float ='rtl'
+
+  //   }
+  //   // console.log(div[i].innerText);
+    
+  // }
+
 });
 
 socket.on("messageLocation", (url) => {
   // console.log(url);
   const html = Mustache.render(messageTemplateLocation, {
-    url:url.loc,
-    timeMSG:moment(url.createdAt).format('h:mm:ss A')
+    name: url.username,
+    url: url.loc,
+    timeMSG: moment(url.createdAt).format("h:mm:ss A"),
   });
   $messageBody.insertAdjacentHTML("beforeend", html);
 });
@@ -90,3 +123,9 @@ $sendLocationButton.addEventListener("click", () => {
   });
 });
 // ********************************
+socket.emit("join", { username, room }, (error) => {
+  if (error) {
+    alert(error);
+    location.href = "/";
+  }
+});

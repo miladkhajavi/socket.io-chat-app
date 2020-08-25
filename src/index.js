@@ -2,6 +2,7 @@ const path = require("path");
 const express = require("express");
 const http = require("http");
 const {generateMSG, generateLocationMSG} = require('./utils/Msg')
+const {addUser, getUser, getUsersInRoom, removeUser} = require('./utils/users')
 const socketio = require("socket.io");
 const app = express();
 const server = http.createServer(app);
@@ -25,23 +26,33 @@ io.on("connection", (socket) => {
   //     io.emit('countUpdate',count)
   // })
   // ********************************
-
-  // welcome user ******************
-  socket.emit("message", generateMSG('خوش آمدید!'));
-  socket.broadcast.emit("message", generateMSG('new user joined the chat'));
-  // *******************************
+  socket.on('join', (option, callback)=>{
+   const {error,user} = addUser({id:socket.id , ...option})
+   if(error){
+     return callback(error)
+   }
+    socket.join(user.room)
+    // welcome user ******************
+    socket.emit("message", generateMSG('ادمین','خوش آمدید'));
+    socket.broadcast.to(user.room).emit("message", generateMSG('ادمین',`${user.username} به گروه پیوست`));
+    // *******************************
+    callback()
+  })
   // send message ******************
   socket.on("sendMSG", (message, callback) => {
-    // console.log(message);
-    io.emit("message", generateMSG(message));
+    
+    const user = getUser(socket.id)
+    // console.log(user);
+    io.to(user.room).emit("message", generateMSG(user.username,message));
     callback("Delivered");
   });
   // *******************************
   // send my current location ******
   socket.on("sendLocation", (coords, callback) => {
-    io.emit(
+    const user = getUser(socket.id)
+    io.to(user.room).emit(
       "messageLocation",
-      generateLocationMSG(`https://google.com/maps?q=${coords.latitude},${coords.longitude}`)
+      generateLocationMSG(user.username,`https://google.com/maps?q=${coords.latitude},${coords.longitude}`)
     );
     callback();
   });
@@ -49,7 +60,10 @@ io.on("connection", (socket) => {
 
   // disconnected ******************
   socket.on("disconnect", () => {
-    io.emit("message", generateMSG('A user has left the chat'));
+    const user = removeUser(socket.id)
+    if(user){
+    io.to(user.room).emit("message", generateMSG('ادمین',`${user.username} از گروه رفت. `));
+    }
   });
   // *******************************
 });
