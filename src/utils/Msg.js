@@ -1,18 +1,22 @@
-const generateMSG = (txt) => {
+const generateMSG = ( username, txt) => {
   return {
+    // own,
+    username,
     txt,
     createdAt: new Date().getTime(),
   };
 };
 
-const generateLocationMSG = (loc) => {
+const generateLocationMSG = (username, loc) => {
   return {
-      loc,
-      createdAt: new Date().getTime(),
+    // own,
+    username,
+    loc,
+    createdAt: new Date().getTime(),
   };
 };
 
 module.exports = {
   generateMSG,
-  generateLocationMSG
+  generateLocationMSG,
 };
